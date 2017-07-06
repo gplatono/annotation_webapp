@@ -6,11 +6,13 @@
 package beans;
 
 import java.io.Serializable;
+import javax.persistence.Entity;
 
 /**
  *
  * @author georgiy
  */
+@Entity
 public class TestInstance implements Serializable {
     
     private Testcase testcase;

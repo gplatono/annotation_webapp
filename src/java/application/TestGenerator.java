@@ -5,6 +5,7 @@
  */
 package application;
 
+import beans.Scene;
 import beans.TestInstance;
 import beans.Testcase;
 import java.io.BufferedReader;
@@ -15,7 +16,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import javax.persistence.Convert;
 
 /**
@@ -57,33 +60,36 @@ public class TestGenerator {
         
         try {   
             JDBCHelper helper = new JDBCHelper();
-        ArrayList<String> scenePaths = JDBCHelper.getScenes();
-        ArrayList<Testcase> testcases = JDBCHelper.getTestcases();
+            ArrayList<Scene> scenes = JDBCHelper.getScenes();
+            List<String> scenePaths = scenes.stream()
+                .map(i -> i.getPath())
+                .collect(Collectors.toList());
+            ArrayList<Testcase> testcases = JDBCHelper.getTestcases();
         
-        Random rand = new Random();
-        testcase = testcases.get(rand.nextInt(testcases.size()));
-        testInstance.setTestcase(testcase);
-        testInstance.setScenePath("scenes" + File.separator + scenePaths.get(testInstance.getTestcase().getSceneID() - 1));
-        testInstance.setImagePath(testInstance.getScenePath() + "scene.jpg");
+            Random rand = new Random();
+            testcase = testcases.get(rand.nextInt(testcases.size()));
+            testInstance.setTestcase(testcase);
+            testInstance.setScenePath("scenes" + File.separator + scenePaths.get(testInstance.getTestcase().getSceneID() - 1));
+            testInstance.setImagePath(testInstance.getScenePath() + "scene.jpg");
         
-        String testQuery = null;
-        if(testInstance.getTestcase().getQueryType() == 1) { 
-            testQuery = "Is " + testInstance.getTestcase().getRelatum() + " " + 
-                    testInstance.getTestcase().getRelation() + " " + testInstance.getTestcase().getReferent1()+ "?";
-        }
-        else {
-            testQuery = "Where is " + testInstance.getTestcase().getRelatum() + " in the presented scene? Please describe its location relative to other objects. Use the following relations only:<br> ";
-            for (String rel : relations) {
-                testQuery += "<b>" + rel + "</b><br>";
+            String testQuery = null;
+            if(testInstance.getTestcase().getQueryType() == 1) { 
+                testQuery = "Is " + testInstance.getTestcase().getRelatum() + " " + 
+                        testInstance.getTestcase().getRelation() + " " + testInstance.getTestcase().getReferent1()+ "?";
             }
-        }        
-        
-        testInstance.setQuery(testQuery);
-        }
-        catch(Exception ex) {     
-            writer.println(ex.getMessage());
-        }
-        return testInstance;
+            else {
+                testQuery = "Where is " + testInstance.getTestcase().getRelatum() + " in the presented scene? Please describe its location relative to other objects. Use the following relations only:<br> ";
+                for (String rel : relations) {
+                    testQuery += "<b>" + rel + "</b><br>";
+                }
+            }        
+
+            testInstance.setQuery(testQuery);
+            }
+            catch(Exception ex) {     
+                writer.println(ex.getMessage());
+            }
+            return testInstance;
     }
     
 }

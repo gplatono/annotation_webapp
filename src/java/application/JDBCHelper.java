@@ -5,6 +5,7 @@
  */
 package application;
 
+import beans.Scene;
 import beans.TestInstance;
 import beans.Testcase;
 import java.io.File;
@@ -64,7 +65,7 @@ public class JDBCHelper {
         return testcases;
     }
     
-    public static ArrayList<String> getScenes() throws SQLException {        
+    public static ArrayList<String> getScenes1() throws SQLException {        
         ArrayList<String> paths = new ArrayList<String>();
         Statement statement = dbConnection.createStatement();
         String query = "SELECT * FROM SCENES";
@@ -75,6 +76,20 @@ public class JDBCHelper {
         results.close();
         statement.close();
         return paths;
+    }
+    
+    public static ArrayList<Scene> getScenes() throws SQLException {        
+        ArrayList<Scene> scenes = new ArrayList<Scene>();
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM SCENES";
+        ResultSet results = statement.executeQuery(query);        
+        while(results.next()) {
+            scenes.add(new Scene(Long.parseLong(results.getString("id")), results.getString("path"), results.getString("name"), results.getString("task_type")));
+            //paths.add(results.getString("path"));
+        }
+        results.close();
+        statement.close();
+        return scenes;
     }
     
     public static void saveResponse(TestInstance testInstance) throws SQLException {
@@ -112,5 +127,14 @@ public class JDBCHelper {
         statement.close();
     }
     
-    public static void add_scene()
+    public static void add_scenes(ArrayList<Scene> scenes) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        String query = "INSERT INTO scenes(name, path, task_type) VALUES ";
+        for (Scene scene : scenes) {
+            query += "(" + "'" + scene.getName() + "'" + "," + "'" + scene.getPath() + "'" + "," + "'" + scene.getTaskType() + "'" + "),";
+        }
+        query = query.substring(0, query.length()-1) + ";";
+        statement.executeUpdate(query);
+        statement.close();
+    }
 }

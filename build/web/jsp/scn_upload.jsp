@@ -13,7 +13,15 @@
     </head>
     <body>
         <form action="SceneUpload" method="POST" enctype="multipart/form-data">
-            <input type = "file" name = "file" size = "50" multiple="true" />            
+            <input type = "file" name = "file" size = "50" multiple="true" />
+            <br />
+            
+            <input type = "radio" name = "taskType" value="DESCRIPT" /> Description task           
+            <br />
+            
+            <input type = "radio" name = "taskType" value="TRUTHJUD" /> Truth-judgment task
+            <br />
+            
             <input type = "submit" value = "Upload" />
         </form>
     </body>

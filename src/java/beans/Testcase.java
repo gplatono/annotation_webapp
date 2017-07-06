@@ -5,10 +5,13 @@
  */
 package beans;
 
+import javax.persistence.Entity;
+
 /**
  *
  * @author gplatono
  */
+@Entity
 public class Testcase {
     public Testcase() {
         
@@ -24,7 +27,16 @@ public class Testcase {
     //private String scenePath;
     //private String imagePath;
     //private String testQuery;
-    //private String[] sceneObjects;    
+    //private String[] sceneObjects; 
+
+    public Testcase(int queryType, int sceneID, String relation, String relatum, String referent1, String referent2) {        
+        this.queryType = queryType;
+        this.sceneID = sceneID;
+        this.relation = relation;
+        this.relatum = relatum;
+        this.referent1 = referent1;
+        this.referent2 = referent2;
+    }    
 
     public int getId() {
         return id;

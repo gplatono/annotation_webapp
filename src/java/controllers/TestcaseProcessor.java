@@ -6,40 +6,24 @@
 package controllers;
 
 import application.JDBCHelper;
-import java.io.File;
-import java.io.FileOutputStream;
+import beans.Scene;
+import beans.Testcase;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.ServletContext;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import javax.servlet.jsp.PageContext;
-import org.apache.commons.fileupload.*;
-import org.apache.commons.fileupload.disk.*;
-import org.apache.commons.fileupload.servlet.*;
-import beans.Scene;
-import java.util.ArrayList;
-
 
 /**
  *
  * @author gplatono
  */
-@WebServlet(name = "SceneUpload", urlPatterns = {"/SceneUpload"})
-@MultipartConfig
-public class SceneUpload extends HttpServlet {
+@WebServlet(name = "TestcaseProcessor", urlPatterns = {"/TestcaseProcessor"})
+public class TestcaseProcessor extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,37 +35,22 @@ public class SceneUpload extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
-        
-        byte[] data;        
-        Collection<Part> parts = request.getParts();
-        ArrayList<Scene> scenes = new ArrayList<Scene>();        
-        
-        try {
-            for (Part part : parts) {
-                String fileName = part.getSubmittedFileName();
-                if (fileName == null)
-                    continue;
-                String filePath = System.getProperty("user.home") + "/scenes/" + fileName;
-                InputStream in = part.getInputStream();
-                OutputStream out = new FileOutputStream(filePath);
-                data = new byte[in.available()];
-                in.read(data);
-                out.write(data);
+            throws ServletException, IOException {
+            String[] raw_testcases = request.getParameter("testcases").split("###");
+            ArrayList<Testcase> testcases = new ArrayList<Testcase>();
+            
+            try {
+                ArrayList<Scene> scenes = JDBCHelper.getScenes();
 
-                in.close();
-                out.close();
-
-                String taskType = request.getParameter("taskType");
-                if (!taskType.equals("DESCRIPT") && !taskType.equals("TRUTHJUD"))
-                    continue;
-                scenes.add(new Scene(filePath, fileName, taskType));
+                for (String raw_testcase : raw_testcases) {
+                    String[] fields = raw_testcase.split("\n");
+                    
+                    Testcase testcase = new Testcase();                    
+                }                    
             }
-            JDBCHelper.add_scenes(scenes);
-        }
-        catch(Exception ex) {
-            String msg = ex.getMessage();
-        }        
+            catch(Exception ex) {
+                String msg = ex.getMessage();
+            }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
