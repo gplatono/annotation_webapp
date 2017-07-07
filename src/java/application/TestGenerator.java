@@ -72,7 +72,8 @@ public class TestGenerator {
             testInstance.setScenePath("scenes" + File.separator + scenePaths.get(testInstance.getTestcase().getSceneID() - 1));
             testInstance.setImagePath(testInstance.getScenePath() + "scene.jpg");
         
-            String testQuery = null;
+            String testQuery = null;                        
+            
             if(testInstance.getTestcase().getQueryType() == 1) { 
                 testQuery = "Is " + testInstance.getTestcase().getRelatum() + " " + 
                         testInstance.getTestcase().getRelation() + " " + testInstance.getTestcase().getReferent1()+ "?";

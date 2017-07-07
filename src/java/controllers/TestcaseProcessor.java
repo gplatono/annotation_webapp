@@ -44,8 +44,18 @@ public class TestcaseProcessor extends HttpServlet {
 
                 for (String raw_testcase : raw_testcases) {
                     String[] fields = raw_testcase.split("\n");
+                    Long scene_id;
+                    int queryType;
+                    for (Scene scene : scenes) {
+                        if (scene.getName().equals(fields[0]))
+                            scene_id = scene.getId();
+                            if(scene.getTaskType().equals("DESCRIPT"))
+                                queryType = 0;
+                            else queryType = 1;
+                            break;
+                    }
                     
-                    Testcase testcase = new Testcase();                    
+                    Testcase testcase = new Testcase();
                 }                    
             }
             catch(Exception ex) {

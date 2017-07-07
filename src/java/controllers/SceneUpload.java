@@ -30,6 +30,7 @@ import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.*;
 import org.apache.commons.fileupload.servlet.*;
 import beans.Scene;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -56,13 +57,14 @@ public class SceneUpload extends HttpServlet {
         byte[] data;        
         Collection<Part> parts = request.getParts();
         ArrayList<Scene> scenes = new ArrayList<Scene>();        
-        
+        PrintWriter writer = response.getWriter();
         try {
             for (Part part : parts) {
                 String fileName = part.getSubmittedFileName();
                 if (fileName == null)
                     continue;
-                String filePath = System.getProperty("user.home") + "/scenes/" + fileName;
+                URL classpath = SceneUpload.class.getClassLoader().getResource("controllers/SceneUpload.class");
+                String filePath = /*classpath.getPath().split("WEB-INF")[0] + System.getProperty("user.home") + */"scenes/" + fileName;
                 InputStream in = part.getInputStream();
                 OutputStream out = new FileOutputStream(filePath);
                 data = new byte[in.available()];
@@ -78,9 +80,12 @@ public class SceneUpload extends HttpServlet {
                 scenes.add(new Scene(filePath, fileName, taskType));
             }
             JDBCHelper.add_scenes(scenes);
+            
+            writer.print("OK!");
         }
         catch(Exception ex) {
             String msg = ex.getMessage();
+            writer.print(msg);
         }        
     }
 
