@@ -40,7 +40,7 @@ public class JDBCHelper {
         }                
     }
     
-    public static ArrayList<Testcase> getTestcases() throws SQLException {
+    public static ArrayList<Testcase> getAllTestcases() throws SQLException {
         ArrayList<Testcase> testcases = new ArrayList<>();
         Statement statement = dbConnection.createStatement();
         String query = "SELECT * FROM testcases;";
@@ -54,11 +54,38 @@ public class JDBCHelper {
             testcase.setRelatum(results.getString("RELATUM"));
             testcase.setReferent1(results.getString("REFERENT1"));
             testcase.setReferent2(results.getString("REFERENT2"));
+            testcase.setEnabled(results.getBoolean("ENABLED"));
             
             //REMOVE THE CONDITION LATER
-            if(testcase.getQueryType() == 2) {
+            //if(testcase.getQueryType() == 2) {
+            //testcases.add(testcase);
+            //}
+        }
+        results.close();
+        statement.close();
+        return testcases;
+    }
+    
+    public static ArrayList<Testcase> getEnabledTestcases() throws SQLException {
+        ArrayList<Testcase> testcases = new ArrayList<>();
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM testcases WHERE enabled = true;";
+        ResultSet results = statement.executeQuery(query);
+        while(results.next()) {
+            Testcase testcase = new Testcase();
+            testcase.setId(results.getInt("ID"));
+            testcase.setQueryType(results.getInt("TYPE"));
+            testcase.setSceneID(results.getInt("SCENE_ID"));
+            testcase.setRelation(results.getString("RELATION"));
+            testcase.setRelatum(results.getString("RELATUM"));
+            testcase.setReferent1(results.getString("REFERENT1"));
+            testcase.setReferent2(results.getString("REFERENT2"));
+            testcase.setEnabled(results.getBoolean("ENABLED"));
+            
+            //REMOVE THE CONDITION LATER
+            //if(testcase.getQueryType() == 2) {
             testcases.add(testcase);
-            }
+            //}
         }
         results.close();
         statement.close();
@@ -132,6 +159,23 @@ public class JDBCHelper {
         String query = "INSERT INTO scenes(name, path, task_type) VALUES ";
         for (Scene scene : scenes) {
             query += "(" + "'" + scene.getName() + "'" + "," + "'" + scene.getPath() + "'" + "," + "'" + scene.getTaskType() + "'" + "),";
+        }
+        query = query.substring(0, query.length()-1) + ";";
+        statement.executeUpdate(query);
+        statement.close();
+    }
+    
+    public static void add_testcases(ArrayList<Testcase> testcases) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        String query = "INSERT INTO testcases(type, scene_id, relation, relatum, referent1, referent2, enabled) VALUES";
+        for (Testcase testcase : testcases) {
+            query += "(" + testcase.getId() + ",";
+            query += testcase.getSceneID() + ",";
+            query += "'" + testcase.getRelation() + "',";
+            query += "'" + testcase.getRelatum() + "',";
+            query += "'" + testcase.getReferent1()+ "',";
+            query += "'" + testcase.getReferent2() + "',";
+            query += testcase.isEnabled() + "),";
         }
         query = query.substring(0, query.length()-1) + ";";
         statement.executeUpdate(query);

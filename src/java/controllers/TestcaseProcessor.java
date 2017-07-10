@@ -36,30 +36,44 @@ public class TestcaseProcessor extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String[] raw_testcases = request.getParameter("testcases").split("###");
+            String[] raw_testcases = request.getParameter("testcases").split("###");            
             ArrayList<Testcase> testcases = new ArrayList<Testcase>();
+            PrintWriter out = response.getWriter();
             
             try {
                 ArrayList<Scene> scenes = JDBCHelper.getScenes();
 
                 for (String raw_testcase : raw_testcases) {
-                    String[] fields = raw_testcase.split("\n");
-                    Long scene_id;
-                    int queryType;
+                    String[] fields = raw_testcase.trim().split("\n");
+                    fields[0] = fields[0].trim();
+                    int scene_id = -1;
+                    int taskType = -1;
                     for (Scene scene : scenes) {
-                        if (scene.getName().equals(fields[0]))
-                            scene_id = scene.getId();
+                        if (scene.getName().equals(fields[0])) {
+                            scene_id = Math.toIntExact(scene.getId());
                             if(scene.getTaskType().equals("DESCRIPT"))
-                                queryType = 0;
-                            else queryType = 1;
+                                taskType = 0;
+                            else taskType = 1;
                             break;
+                        }
                     }
                     
-                    Testcase testcase = new Testcase();
-                }                    
+                    String relation = fields[1].trim();
+                    String relatum = fields[2].trim();
+                    String referent1 = fields[3].trim();
+                    String referent2 = null;
+                    if (fields.length > 4)
+                        referent2 = fields[4].trim();
+                    if (scene_id != -1 && taskType != -1) {
+                        testcases.add(new Testcase(taskType, scene_id, relation, relatum, referent1, referent2, true));
+                    }                    
+                }
+                
+                JDBCHelper.add_testcases(testcases);
+                out.println("OK!");
             }
             catch(Exception ex) {
-                String msg = ex.getMessage();
+                out.println(ex.getMessage());                
             }
     }
 

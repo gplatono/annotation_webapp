@@ -13,7 +13,7 @@
     </head>
     <body>
         <form action="TestcaseProcessor" method="GET">
-            <input type="text" name="testcases" />
+            <textarea rows = "20" cols = "50" name="testcases" ></textarea>
             <br />
             <input type="submit" name="Submit" />
         </form>

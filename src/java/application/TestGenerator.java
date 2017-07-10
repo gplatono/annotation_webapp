@@ -58,13 +58,12 @@ public class TestGenerator {
         catch(Exception ex) {
         }
         
-        try {   
-            JDBCHelper helper = new JDBCHelper();
+        try {               
             ArrayList<Scene> scenes = JDBCHelper.getScenes();
             List<String> scenePaths = scenes.stream()
                 .map(i -> i.getPath())
                 .collect(Collectors.toList());
-            ArrayList<Testcase> testcases = JDBCHelper.getTestcases();
+            ArrayList<Testcase> testcases = JDBCHelper.getEnabledTestcases();
         
             Random rand = new Random();
             testcase = testcases.get(rand.nextInt(testcases.size()));

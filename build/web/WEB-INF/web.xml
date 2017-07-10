@@ -22,7 +22,7 @@
     </servlet>
     <servlet>
         <servlet-name>TestcaseProcessor</servlet-name>
-        <servlet-class>controllers.TestCaseProcessor</servlet-class>
+        <servlet-class>controllers.TestcaseProcessor</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SubmissionHandler</servlet-name>

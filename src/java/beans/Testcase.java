@@ -24,18 +24,20 @@ public class Testcase {
     private String relatum;
     private String referent1;
     private String referent2;
+    private boolean enabled;
     //private String scenePath;
     //private String imagePath;
     //private String testQuery;
     //private String[] sceneObjects; 
 
-    public Testcase(int queryType, int sceneID, String relation, String relatum, String referent1, String referent2) {        
+    public Testcase(int queryType, int sceneID, String relation, String relatum, String referent1, String referent2, boolean enabled) {        
         this.queryType = queryType;
         this.sceneID = sceneID;
         this.relation = relation;
         this.relatum = relatum;
         this.referent1 = referent1;
         this.referent2 = referent2;
+        this.enabled = enabled;
     }    
 
     public int getId() {
@@ -93,4 +95,12 @@ public class Testcase {
     public void setSceneID(int sceneID) {
         this.sceneID = sceneID;
     }    
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }   
 }

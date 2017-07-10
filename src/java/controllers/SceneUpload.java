@@ -65,6 +65,8 @@ public class SceneUpload extends HttpServlet {
                     continue;
                 URL classpath = SceneUpload.class.getClassLoader().getResource("controllers/SceneUpload.class");
                 String filePath = /*classpath.getPath().split("WEB-INF")[0] + System.getProperty("user.home") + */"scenes/" + fileName;
+                File file = new File("scenes/");
+                file.mkdirs();
                 InputStream in = part.getInputStream();
                 OutputStream out = new FileOutputStream(filePath);
                 data = new byte[in.available()];

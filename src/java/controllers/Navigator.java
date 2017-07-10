@@ -100,7 +100,7 @@ public class Navigator extends HttpServlet {
                 TestInstance testInstance = TestGenerator.generate(appPath);
                 testInstance.setUserID(1);
                 
-                try {
+                /*try {
                     List<Scene> scenes = JDBCHelper.getScenes(); 
                     Random rand = new Random();
                     int idx = rand.nextInt(scenes.size()-10) + 10;
@@ -109,7 +109,7 @@ public class Navigator extends HttpServlet {
                 }
                 catch (Exception ex) {
                     
-                }
+                }*/
                 request.getSession().setAttribute("testInstance", testInstance);
                 //request.setAttribute("imagePath", request.getContextPath() + testcase.getImagePath());//"scenes/" + (testcase.getSceneID() + 1) + "/" + "scene.png");                
                 //return;
