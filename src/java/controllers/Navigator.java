@@ -71,8 +71,6 @@ public class Navigator extends HttpServlet {
             if (address == null)
                 address = "index";
             if(request.getParameter("submit_response") != null) {
-                //PrintWriter out = response.getWriter();
-                //out.println("ok");                
                 TestInstance testInstance = (TestInstance)request.getSession().getAttribute("testInstance");                
                
                 if(request.getParameter("description") != null)
@@ -98,18 +96,8 @@ public class Navigator extends HttpServlet {
                 String appPath = classpath.getPath().split("WEB-INF")[0];                
                 //String datasetPath = System.getProperty("user.home") + File.separator + "scenes";
                 TestInstance testInstance = TestGenerator.generate(appPath);
-                testInstance.setUserID(1);
+                testInstance.setUserID(1);                
                 
-                /*try {
-                    List<Scene> scenes = JDBCHelper.getScenes(); 
-                    Random rand = new Random();
-                    int idx = rand.nextInt(scenes.size()-10) + 10;
-                    testInstance.setImagePath("scenes/" + scenes.get(idx).getName());
-                    testInstance.setQuery("Is Block 1 to the left of Block 2?");
-                }
-                catch (Exception ex) {
-                    
-                }*/
                 request.getSession().setAttribute("testInstance", testInstance);
                 //request.setAttribute("imagePath", request.getContextPath() + testcase.getImagePath());//"scenes/" + (testcase.getSceneID() + 1) + "/" + "scene.png");                
                 //return;

@@ -50,7 +50,7 @@
             <div style="overflow: hidden; padding: 10px; font-size: 15px;">                
                 <c:out value="${testInstance.query}" escapeXml="False"/>
                     <c:choose>
-                        <c:when test="${testInstance.testcase.queryType == 1}">                            
+                        <c:when test="${testInstance.testcase.queryType == 0}">                            
                             <form action="Navigator?page=eval">
                             <div style="height: 50px; width: 100%;">
                                 <div style="overflow: hidden; float: left; width: 40%; border: 2px; padding: 5px;">    
