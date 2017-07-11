@@ -59,17 +59,18 @@ public class TestGenerator {
         }
         
         try {               
-            ArrayList<Scene> scenes = JDBCHelper.getScenes();
-            List<String> scenePaths = scenes.stream()
-                .map(i -> i.getPath())
-                .collect(Collectors.toList());
+            //ArrayList<Scene> scenes = JDBCHelper.getScenes();
+            //List<String> scenePaths = scenes.stream()
+                //.map(i -> i.getPath())
+                //.collect(Collectors.toList());
             ArrayList<Testcase> testcases = JDBCHelper.getEnabledTestcases();
         
             Random rand = new Random();
             testcase = testcases.get(rand.nextInt(testcases.size()));
             testInstance.setTestcase(testcase);
-            testInstance.setScenePath("scenes" + File.separator + scenePaths.get(testInstance.getTestcase().getSceneID() - 1));
-            testInstance.setImagePath(testInstance.getScenePath() + "scene.jpg");
+            Scene testScene = JDBCHelper.getSceneById(testcase.getSceneID());
+            //testInstance.setScenePath("scenes" + File.separator + scenePaths.get(testInstance.getTestcase().getSceneID() - 1));
+            testInstance.setImagePath(testScene.getPath());
         
             String testQuery = null;                        
             

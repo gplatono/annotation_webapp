@@ -21,7 +21,7 @@ public class Scene implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
     
     private String path;
     private String name;
@@ -30,7 +30,7 @@ public class Scene implements Serializable {
     public Scene() {
     }
 
-    public Scene(Long id, String path) {
+    public Scene(int id, String path) {
         this.id = id;
         this.path = path;
     }    
@@ -42,18 +42,18 @@ public class Scene implements Serializable {
         this.taskType = taskType;
     }   
 
-    public Scene(Long id, String path, String name, String taskType) {
+    public Scene(int id, String path, String name, String taskType) {
         this.id = id;
         this.path = path;
         this.name = name;
         this.taskType = taskType;
     }
     
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -81,14 +81,7 @@ public class Scene implements Serializable {
         this.taskType = taskType;
     }
     
-    
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
 
     @Override
     public boolean equals(Object object) {
@@ -97,7 +90,7 @@ public class Scene implements Serializable {
             return false;
         }
         Scene other = (Scene) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (this.id != other.id) {
             return false;
         }
         return true;

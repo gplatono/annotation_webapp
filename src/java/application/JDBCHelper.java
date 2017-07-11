@@ -58,7 +58,7 @@ public class JDBCHelper {
             
             //REMOVE THE CONDITION LATER
             //if(testcase.getQueryType() == 2) {
-            //testcases.add(testcase);
+            testcases.add(testcase);
             //}
         }
         results.close();
@@ -111,12 +111,25 @@ public class JDBCHelper {
         String query = "SELECT * FROM SCENES";
         ResultSet results = statement.executeQuery(query);        
         while(results.next()) {
-            scenes.add(new Scene(Long.parseLong(results.getString("id")), results.getString("path"), results.getString("name"), results.getString("task_type")));
+            scenes.add(new Scene(Integer.parseInt(results.getString("id")), results.getString("path"), results.getString("name"), results.getString("task_type")));
             //paths.add(results.getString("path"));
         }
         results.close();
         statement.close();
         return scenes;
+    }
+    
+    public static Scene getSceneById(int id) throws SQLException {
+        Scene scene = null;
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM scenes WHERE id = " + id;
+        ResultSet results = statement.executeQuery(query);
+        if(results.next()) {
+            scene = new Scene(id, results.getString("path"), results.getString("name"), results.getString("task_type"));
+        }
+        results.close();
+        statement.close();
+        return scene;
     }
     
     public static void saveResponse(TestInstance testInstance) throws SQLException {
