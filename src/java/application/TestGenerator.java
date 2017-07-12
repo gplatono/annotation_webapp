@@ -74,7 +74,7 @@ public class TestGenerator {
         
             String testQuery = null;                        
             
-            if(testInstance.getTestcase().getQueryType() == 1) { 
+            if(testInstance.getTestcase().getQueryType() == 0) { 
                 testQuery = "Is " + testInstance.getTestcase().getRelatum() + " " + 
                         testInstance.getTestcase().getRelation() + " " + testInstance.getTestcase().getReferent1()+ "?";
             }
@@ -83,7 +83,7 @@ public class TestGenerator {
                 for (String rel : relations) {
                     testQuery += "<b>" + rel + "</b><br>";
                 }
-            }        
+            }               
 
             testInstance.setQuery(testQuery);
             }

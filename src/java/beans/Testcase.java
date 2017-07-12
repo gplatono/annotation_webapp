@@ -25,12 +25,16 @@ public class Testcase {
     private String referent1;
     private String referent2;
     private boolean enabled;
+    private String query;
+    private String signature;
     //private String scenePath;
     //private String imagePath;
     //private String testQuery;
     //private String[] sceneObjects; 
 
-    public Testcase(int queryType, int sceneID, String relation, String relatum, String referent1, String referent2, boolean enabled) {        
+    
+    
+    public Testcase(int queryType, int sceneID, String relation, String relatum, String referent1, String referent2, boolean enabled, String query, String signature) {        
         this.queryType = queryType;
         this.sceneID = sceneID;
         this.relation = relation;
@@ -38,6 +42,8 @@ public class Testcase {
         this.referent1 = referent1;
         this.referent2 = referent2;
         this.enabled = enabled;
+        this.query = query;
+        this.signature = signature;
     }    
 
     public int getId() {
@@ -103,4 +109,20 @@ public class Testcase {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }   
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }   
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }    
 }

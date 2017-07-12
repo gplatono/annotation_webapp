@@ -18,6 +18,7 @@ import application.TestGenerator;
 import beans.Scene;
 import beans.TestInstance;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -38,7 +39,7 @@ public class Navigator extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        //response.setContentType("text/html;charset=UTF-8");
         //try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             //out.println(request.getParameter("page"));
@@ -56,9 +57,15 @@ public class Navigator extends HttpServlet {
         //if(request.getParameter("login_val") != null && request.getParameter("login_val").equals("admin") &&
             //request.getParameter("pass_val") != null && request.getParameter("pass_val").equals("admin"))
             //request.getRequestDispatcher("jsp/index.jsp").forward(request, response);            
+            try {
+                
             String address = request.getParameter("page");
             
             
+            if (address == null) {                
+                address = "index_1";
+            }
+
             if(address.equals("DUMP")) {
                 try {
                 new JDBCHelper().dump_responses("dump");
@@ -68,15 +75,13 @@ public class Navigator extends HttpServlet {
                 }
                 return;
             }
-            if (address == null)
-                address = "index";
             if(request.getParameter("submit_response") != null) {
                 TestInstance testInstance = (TestInstance)request.getSession().getAttribute("testInstance");                
                
                 if(request.getParameter("description") != null)
                     testInstance.setResponse(request.getParameter("description"));
                 else
-                    testInstance.setResponse(request.getParameter("submit_response"));
+                    testInstance.setResponse(request.getParameter("submit_response").toUpperCase());
                 request.setAttribute("result", "Thank you. Your last response - \'" + testInstance.getResponse() + "\' - has been saved...");                
                 try {
                 JDBCHelper.saveResponse(testInstance);
@@ -94,7 +99,11 @@ public class Navigator extends HttpServlet {
             if(address.equals("eval")) {
                 URL classpath = Navigator.class.getClassLoader().getResource("controllers/Navigator.class");
                 String appPath = classpath.getPath().split("WEB-INF")[0];                
-                //String datasetPath = System.getProperty("user.home") + File.separator + "scenes";
+                //String datasetPath = System.getProperty("user.home") + File.separator + "scenes"; 
+                
+                
+                
+                
                 TestInstance testInstance = TestGenerator.generate(appPath);
                 testInstance.setUserID(1);                
                 
@@ -105,6 +114,10 @@ public class Navigator extends HttpServlet {
             if(address.equals("SCNUPLD"))
                 address = "scn_upload";
             request.getRequestDispatcher("/jsp/" + address + ".jsp").forward(request, response);
+            }
+            catch(Exception ex) {
+                response.getWriter().println(ex.getMessage());
+            }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

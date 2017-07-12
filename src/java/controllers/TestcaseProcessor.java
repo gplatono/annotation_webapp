@@ -64,8 +64,18 @@ public class TestcaseProcessor extends HttpServlet {
                     String referent2 = null;
                     if (fields.length > 4)
                         referent2 = fields[4].trim();
+                    String query = null;
+                    String signature = scene_id + " " + relation + " " + relatum + " " + referent1 + " " + referent2;
+                    if(taskType == 0) {
+                        if (referent2 == null || referent2.equals(""))
+                            query = "Is " + relatum + " " + relation + " " + referent1 + "?";
+                        else
+                            query = "Is " + relatum + " " + relation + " " + referent1 + " and " + referent2 + "?";
+                    }
+                    else
+                        query = "Where is " + relatum + " in the given scene?";
                     if (scene_id != -1 && taskType != -1) {
-                        testcases.add(new Testcase(taskType, scene_id, relation, relatum, referent1, referent2, true));
+                        testcases.add(new Testcase(taskType, scene_id, relation, relatum, referent1, referent2, true, query, signature));
                     }                    
                 }
                 

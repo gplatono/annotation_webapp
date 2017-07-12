@@ -55,6 +55,7 @@ public class JDBCHelper {
             testcase.setReferent1(results.getString("REFERENT1"));
             testcase.setReferent2(results.getString("REFERENT2"));
             testcase.setEnabled(results.getBoolean("ENABLED"));
+            testcase.setQuery(results.getString("QUERY"));
             
             //REMOVE THE CONDITION LATER
             //if(testcase.getQueryType() == 2) {
@@ -81,6 +82,7 @@ public class JDBCHelper {
             testcase.setReferent1(results.getString("REFERENT1"));
             testcase.setReferent2(results.getString("REFERENT2"));
             testcase.setEnabled(results.getBoolean("ENABLED"));
+            testcase.setQuery(results.getString("QUERY"));
             
             //REMOVE THE CONDITION LATER
             //if(testcase.getQueryType() == 2) {
@@ -167,31 +169,64 @@ public class JDBCHelper {
         statement.close();
     }
     
+    public static boolean sceneExist(String name) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM scenes WHERE name = '" + name + "'";
+        ResultSet results = statement.executeQuery(query);        
+        boolean ret_val = results.next();
+        statement.close();
+        results.close();
+        return ret_val;
+    }
+    
+    public static boolean testExist(String signature) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM testcases WHERE signature = '" + signature + "'";
+        ResultSet results = statement.executeQuery(query);        
+        boolean ret_val = results.next();
+        statement.close();
+        results.close();
+        return ret_val;
+    }
+    
     public static void add_scenes(ArrayList<Scene> scenes) throws SQLException {
         Statement statement = dbConnection.createStatement();
         String query = "INSERT INTO scenes(name, path, task_type) VALUES ";
+        String value_list = "";
         for (Scene scene : scenes) {
-            query += "(" + "'" + scene.getName() + "'" + "," + "'" + scene.getPath() + "'" + "," + "'" + scene.getTaskType() + "'" + "),";
+            if (!sceneExist(scene.getName()))
+                value_list += "(" + "'" + scene.getName() + "'" + "," + "'" + scene.getPath() + "'" + "," + "'" + scene.getTaskType() + "'" + "),";
         }
-        query = query.substring(0, query.length()-1) + ";";
-        statement.executeUpdate(query);
+        if(!value_list.equals("")) {
+            query += value_list;
+            query = query.substring(0, query.length()-1) + ";";
+            statement.executeUpdate(query);
+        }        
         statement.close();
     }
     
     public static void add_testcases(ArrayList<Testcase> testcases) throws SQLException {
         Statement statement = dbConnection.createStatement();
-        String query = "INSERT INTO testcases(type, scene_id, relation, relatum, referent1, referent2, enabled) VALUES";
-        for (Testcase testcase : testcases) {
-            query += "(" + testcase.getId() + ",";
-            query += testcase.getSceneID() + ",";
-            query += "'" + testcase.getRelation() + "',";
-            query += "'" + testcase.getRelatum() + "',";
-            query += "'" + testcase.getReferent1()+ "',";
-            query += "'" + testcase.getReferent2() + "',";
-            query += testcase.isEnabled() + "),";
+        String query = "INSERT INTO testcases(type, scene_id, relation, relatum, referent1, referent2, enabled, query, signature) VALUES";
+        String value_list = "";
+        for (Testcase testcase : testcases) {            
+            if(!testExist(testcase.getSignature())) {
+                value_list += "(" + testcase.getId() + ",";
+                value_list += testcase.getSceneID() + ",";
+                value_list += "'" + testcase.getRelation() + "',";
+                value_list += "'" + testcase.getRelatum() + "',";
+                value_list += "'" + testcase.getReferent1()+ "',";
+                value_list += "'" + testcase.getReferent2() + "',";
+                value_list += testcase.isEnabled() + ",";
+                value_list += "'" + testcase.getQuery() + "',";
+                value_list += "'" + testcase.getSignature() + "'),";
+            }
         }
-        query = query.substring(0, query.length()-1) + ";";
-        statement.executeUpdate(query);
+        if(!value_list.equals("")) {
+            query += value_list;
+            query = query.substring(0, query.length()-1) + ";";
+            statement.executeUpdate(query);
+        }        
         statement.close();
     }
 }
