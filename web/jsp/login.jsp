@@ -25,7 +25,7 @@
             <center><h1>Login</h1></center>
             
             <div class="login">
-            <form method="POST" action="Navigator">
+            <form method="POST" action="Login">
                 <table border="0">
                     <!--<thead1>
                         <tr>
@@ -35,15 +35,15 @@
                     </thead>-->
                     <tbody>
                         <tr>
-                            <td>Login:</td>
+                            <td>Username:</td>
                             <td>
-                                <input type="text" style="width: 200px;" name="login_val">
+                                <input type="text" style="width: 200px;" name="username">
                             </td>
                         </tr>
                         <tr>
                             <td>Password:</td>
                             <td>
-                                <input type="password" style="width: 200px;" name="pass_val">
+                                <input type="password" style="width: 200px;" name="password">
                             </td>
                         </tr>
                         <tr>
@@ -53,8 +53,9 @@
                             </td>
                         </tr>
                     </tbody>
-                </table></form>            
+                </table></form>               
             </div>            
+            <p align="center">Don't have an account? <a href="Navigator?page=sign_up">Register</a></p>
         </section>
         <footer>
             <div class="outer">

@@ -17,10 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import application.TestGenerator;
 import beans.Scene;
 import beans.TestInstance;
+import beans.User;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import application.UserSecurityManager;
 
 /**
  *
@@ -39,81 +41,61 @@ public class Navigator extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
-        //try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            //out.println(request.getParameter("page"));
-            /*out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Navigator</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Navigator at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");*/
-            //return;
-        //}
-        //if(request.getParameter("login_val") != null)
-        //if(request.getParameter("login_val") != null && request.getParameter("login_val").equals("admin") &&
-            //request.getParameter("pass_val") != null && request.getParameter("pass_val").equals("admin"))
-            //request.getRequestDispatcher("jsp/index.jsp").forward(request, response);            
+        
+        String page;
+        
+                  
             try {
+                UserSecurityManager manager = new UserSecurityManager();
+                String url = request.getServletPath();
+                if(url.contains("Login")) {
+                    String username = request.getParameter("username");
+                    String password = request.getParameter("password");
+                    User user = manager.login(username, password);
+                    if (request.getSession().getAttribute("user") == null && user != null)
+                        request.getSession().setAttribute("user", user);
+                }
                 
-            String address = request.getParameter("page");
-            
-            
-            if (address == null) {                
-                address = "index_1";
-            }
+                
+                if(request.getSession().getAttribute("user") != null || request.getParameter("page").equals("sign_up")) {
 
-            if(address.equals("DUMP")) {
-                try {
-                new JDBCHelper().dump_responses("dump");
-                }
-                catch(Exception ex) {
-                    response.getWriter().println(ex.getMessage());
-                }
-                return;
-            }
-            if(request.getParameter("submit_response") != null) {
-                TestInstance testInstance = (TestInstance)request.getSession().getAttribute("testInstance");                
-               
-                if(request.getParameter("description") != null)
-                    testInstance.setResponse(request.getParameter("description"));
-                else
-                    testInstance.setResponse(request.getParameter("submit_response").toUpperCase());
-                request.setAttribute("result", "Thank you. Your last response - \'" + testInstance.getResponse() + "\' - has been saved...");                
-                try {
-                JDBCHelper.saveResponse(testInstance);
-                }
-                catch (Exception ex) {
-                   
+                page = request.getParameter("page");
+                
+                if (page == null) {
+                    page = "index_1";
                 }
                 
-                address = "eval";
-                //return;
-            }
-            else {
-                request.setAttribute("result", null);
-            }
-            if(address.equals("eval")) {
-                URL classpath = Navigator.class.getClassLoader().getResource("controllers/Navigator.class");
-                String appPath = classpath.getPath().split("WEB-INF")[0];                
-                //String datasetPath = System.getProperty("user.home") + File.separator + "scenes"; 
+                if(page.equals("DUMP")) {
+                    new JDBCHelper().dump_responses("dump");                
+                }
                 
-                
-                
-                
-                TestInstance testInstance = TestGenerator.generate(appPath);
-                testInstance.setUserID(1);                
-                
-                request.getSession().setAttribute("testInstance", testInstance);
-                //request.setAttribute("imagePath", request.getContextPath() + testcase.getImagePath());//"scenes/" + (testcase.getSceneID() + 1) + "/" + "scene.png");                
-                //return;
-            }            
-            if(address.equals("SCNUPLD"))
-                address = "scn_upload";
-            request.getRequestDispatcher("/jsp/" + address + ".jsp").forward(request, response);
+                if(request.getParameter("submit_response") != null) {
+                    TestInstance testInstance = (TestInstance)request.getSession().getAttribute("testInstance");                
+
+                    if(request.getParameter("description") != null)
+                        testInstance.setResponse(request.getParameter("description"));
+                    else
+                        testInstance.setResponse(request.getParameter("submit_response").toUpperCase());
+                    request.setAttribute("result", "Thank you. Your last response - \'" + testInstance.getResponse() + "\' - has been saved...");                
+                    JDBCHelper.saveResponse(testInstance);
+                    
+                    page = "eval";
+                }
+                else {
+                    request.setAttribute("result", null);
+                }
+                if(page.equals("eval")) {
+                    URL classpath = Navigator.class.getClassLoader().getResource("controllers/Navigator.class");
+                    String appPath = classpath.getPath().split("WEB-INF")[0];                  
+                    TestInstance testInstance = TestGenerator.generate((User)request.getSession().getAttribute("user"));
+                    testInstance.setUserID(1);
+                    request.getSession().setAttribute("testInstance", testInstance);
+                }            
+                if(page.equals("SCNUPLD"))
+                    page = "scn_upload";
+                }
+                else page = "login";
+                request.getRequestDispatcher("/jsp/" + page + ".jsp").forward(request, response);
             }
             catch(Exception ex) {
                 response.getWriter().println(ex.getMessage());

@@ -44,6 +44,10 @@
         <servlet-name>TestcaseProcessor</servlet-name>
         <url-pattern>/TestcaseProcessor</url-pattern>
     </servlet-mapping>        
+    <servlet-mapping>
+        <servlet-name>Navigator</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -52,12 +56,12 @@
     <welcome-file-list>
         <welcome-file>
             <!--JDBC-->
-            jsp/index_1.jsp
+            jsp/login.jsp
         </welcome-file>
     </welcome-file-list>
     <context-param>
         <description>Scene upload folder</description>
         <param-name>scene_upload_folder</param-name>
         <param-value>/scenes</param-value>
-    </context-param>
+    </context-param>        
 </web-app>

@@ -8,6 +8,7 @@ package application;
 import beans.Scene;
 import beans.TestInstance;
 import beans.Testcase;
+import beans.User;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -229,4 +230,42 @@ public class JDBCHelper {
         }        
         statement.close();
     }
+    
+    public static ArrayList<User> getUsers() throws SQLException {
+        ArrayList<User> users = new ArrayList<User>();
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM USERS;";
+        ResultSet results = statement.executeQuery(query);
+        while(results.next()) {
+            users.add(new User(results.getInt("id"), results.getString("username"), results.getString("password")));
+        }
+        results.close();
+        statement.close();
+        return users;
+    }
+    
+    public static ArrayList<Testcase> getUnansweredForUser(User user) throws SQLException {
+        ArrayList<Testcase> testcases = new ArrayList<Testcase>();
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM TESTCASES WHERE enabled = true and id NOT IN (SELECT testcase FROM RESPONSES WHERE USER_ID = " + user.getId() + ");";
+        ResultSet results = statement.executeQuery(query);
+        while(results.next()) {
+            Testcase testcase = new Testcase();
+            testcase.setId(results.getInt("ID"));
+            testcase.setQueryType(results.getInt("TYPE"));
+            testcase.setSceneID(results.getInt("SCENE_ID"));
+            testcase.setRelation(results.getString("RELATION"));
+            testcase.setRelatum(results.getString("RELATUM"));
+            testcase.setReferent1(results.getString("REFERENT1"));
+            testcase.setReferent2(results.getString("REFERENT2"));
+            testcase.setEnabled(results.getBoolean("ENABLED"));
+            testcase.setQuery(results.getString("QUERY"));            
+            testcases.add(testcase);        
+        }
+        results.close();
+        statement.close();
+        return testcases;       
+    }
+    
+    
 }
