@@ -16,6 +16,26 @@ public class User implements Serializable {
     private String username;
     private String password;
     private int id;
+    private int role;
+
+    /**
+     * Get the value of role
+     *
+     * @return the value of role
+     */
+    public int getRole() {
+        return role;
+    }
+
+    /**
+     * Set the value of role
+     *
+     * @param role new value of role
+     */
+    public void setRole(int role) {
+        this.role = role;
+    }
+
 
     /**
      * Get the value of user_id
@@ -52,9 +72,16 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public User(int id, String username, String password) {
+    public User(int id, String username, String password, int role) {
         this.id = id;
+        this.role = role;
         this.username = username;
         this.password = password;
+    }   
+    
+    public User(String username, String password, int role) {        
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }   
 }

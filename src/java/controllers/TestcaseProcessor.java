@@ -52,8 +52,8 @@ public class TestcaseProcessor extends HttpServlet {
                         if (scene.getName().equals(fields[0])) {
                             scene_id = scene.getId();
                             if(scene.getTaskType().equals("DESCRIPT"))
-                                taskType = 0;
-                            else taskType = 1;
+                                taskType = 1;
+                            else taskType = 0;
                             break;
                         }
                     }

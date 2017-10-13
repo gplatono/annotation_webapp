@@ -34,46 +34,45 @@
                     <!--<li><a href="#annotations">Annotations</a></li>-->
                     <li><a href="Navigator?page=eval">Evaluation</a></li>
                     <li><a href="Navigator?page=exam_2">Examples</a></li>                   
+                      <li><a href="Navigator?page=logout">Logout</a></li> 
                 </ul>
             </nav>
             <section class="content">                
-                <%if(request.getAttribute("result") != null) { %>
+                <%if(request.getParameter("result") != null) { %>
                 <p style="font-size: 15px;">
-                <%=request.getAttribute("result")%>
+                <%=request.getParameter("result")%>
                  </p>
             <%}%>
                
             <div style='background-color: #FFFFFF;'>
-            <div style="width: 80%; float: left; overflow: hidden;">
+            <div style="width: 100%; float: left; overflow: hidden;">
                 <img class="scene" src="${testInstance.imagePath}"/>
             </div>            
-            <div style="overflow: hidden; padding: 10px; font-size: 15px;">                
+            <div style="position:relative; left: 20%; width: 60%; padding: 10px; font-size: 15px;">                
                 <c:out value="${testInstance.query}" escapeXml="False"/>
                     <c:choose>
                         <c:when test="${testInstance.testcase.queryType == 0}">                            
-                            <form action="Navigator?page=eval">
+                            <form method="POST" action="Navigator">
+                                <input type="hidden" name="page" value="send_response">
                             <div style="height: 50px; width: 100%;">
-                                <div style="overflow: hidden; float: left; width: 40%; border: 2px; padding: 5px;">    
-                                    <input type="submit" style="width: 100%; height: 30px;" name="submit_response" value="Yes"/>                                
-                                <br>
-                                
-                                    <input type="submit" style="width: 100%; height: 30px;" name="submit_response" value="Rather yes"/>
-                                <br>
-                                    <input type="submit" style="width: 100%; height: 30px;" name="submit_response" value="Uncertain"/>  
-                                <br>
-                                    <input type="submit" style="width: 100%; height: 30px;" name="submit_response" value="Rather no"/>  
-                                <br>
-                                    <input type="submit" style="width: 100%; height: 30px;" name="submit_response" value="No"/>  
+                                <div style="overflow: hidden; float: right; width: 100%; border: 2px; padding: 5px;">    
+                                    <input type="submit" style="width: 18%; height: 30px;" name="submit_response" value="Yes"/>                                                               
+                                    <input type="submit" style="width: 18%; height: 30px;" name="submit_response" value="Rather yes"/>                                
+                                    <input type="submit" style="width: 18%; height: 30px;" name="submit_response" value="Uncertain"/>                               
+                                    <input type="submit" style="width: 18%; height: 30px;" name="submit_response" value="Rather no"/>                               
+                                    <input type="submit" style="width: 18%; height: 30px;" name="submit_response" value="No"/>  
                                 </div>
                             </div>
                             </form>
                         </c:when>
                         <c:otherwise>                            
-                            <form action="Navigator?page=eval">
-                            <div style="width: 100%; border: 2px; padding: 5px; margin: 0 auto;">
-                                <textarea name="description" style="resize: none; width: 98%;" rows="20"></textarea>
-                                <br>   
-                                <input style="float: right; width: 50%;" type="submit" name="submit_response" value="Submit"/>
+                            <form method="POST" action="Navigator">
+                                <input type="hidden" name="page" value="send_response">
+                            <div style="width: 100%; border: 0px; padding: 0px; margin: 0 auto;">
+                                <textarea name="description" style="resize: none; height: 100px; width: 99%;" rows="20"></textarea>
+                                <br> 
+                                <input style="float: left; height: 30px; width: 10%;" type="submit" name="skip" value="Skip"/>
+                                <input style="float: right; height: 30px; width: 10%;" type="submit" name="submit_response" value="Submit"/>
                                 <br><br>
                                 <!--Objects present in the scene:-->
                                 <br><br>

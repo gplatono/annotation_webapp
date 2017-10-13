@@ -33,7 +33,8 @@
                     <li><a href="Navigator?page=index_1">Home</a></li>
                     <!--<li><a href="#annotations">Annotations</a></li>-->
                     <li><a href="Navigator?page=eval">Evaluation</a></li>
-                    <li><a href="Navigator?page=exam_2">Examples</a></li>                    
+                    <li><a href="Navigator?page=exam_2">Examples</a></li>                     
+                    <li><a href="Navigator?page=logout">Logout</a></li> 
                 </ul>
             </nav>
             <section class="content">
@@ -82,7 +83,7 @@
 
                             However, if in that scene red block 7 is the ONLY RED BLOCK BEHIND THE BLOCK 8, then the answer is fine -- even if there is also, say, a BLACK BLOCK BEHIND BLOCK 8. So your description can take into account the properties of the target object, as specified in the question (i.e., the type, and color, if given -- but not its number).</li>
 
-                        <li>Avoid complicated descriptions (“Almost behind”, “5 feet above”, etc.); rather, use just one of the relations listed below. Also, if several prepositions are appropriate, pick the one that you feel is the most most natural -- how you would describe the location of the target object to someone who is aware of the type (and color, if relevant) of the object, but not *which* object with these properties you have in mind. (Assume that no object numbers are actually visible.)</li>
+                        <li>Avoid complicated descriptions (“Almost behind”, “5 feet above”, etc.); rather, use just one of the relations listed below. Also, if several prepositions are appropriate, pick the one that you feel is the most natural -- how you would describe the location of the target object to someone who is aware of the type (and color, if relevant) of the object, but not *which* object with these properties you have in mind. (Assume that no object numbers are actually visible.)</li>
 
                         <li>Here are the permissible relations; use EXACTLY ONE in your location specification (if you think that's possible):</li>
 
@@ -124,7 +125,10 @@
 
                     <p>Scene specifications:</p>
 
-                    <p>Two types of scenes will be present. The first type will only contain two (three for between) objects, which are arguments of the preposition we will be testing. The second type will contain the same argument objects but in a richer environment, i.e., additional objects will be present. That will give us a chance to see how the context affects the usage of prepositions. The distribution of scenes over the set of prepositions is uniform. Also, additional scenes with smaller or bigger perceived frame will be present to test how the frame size affects judgment. The balance between positive and negative cases will be maintained by running our model on the set and taking the same amount of cases when the model predicts “yes” and when it predicts “no”.</p>
+                    <p>Two types of scenes will be present. The first type will only contain two (three for between) objects, which are arguments of the preposition we will be testing. The second type will contain the same argument objects but in a richer environment, i.e., additional objects will be present. That will give us a chance to see how the context affects the usage of prepositions. The distribution of scenes over the set of prepositions is uniform. Also, additional scenes with smaller or bigger perceived frame will be present to test how the frame size affects judgment. The balance between positive and negative cases will be maintained by running our model on the set and taking the same amount of cases when the model predicts “yes” and when it predicts “no”. <b>You can assume that the all the knowledge about the object identities and properties, e.g., color, is available to the system, so you can rely on this in your annotations.</b></p>
+                    
+                    <b><p>Your progress will be saved. You can sign out and sign back in to resume your annotations at any time.</p></b>                    
+                    
                 </div>
             </section>        
             <footer>

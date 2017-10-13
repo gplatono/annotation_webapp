@@ -4,6 +4,7 @@
     Author     : Георгий Платонов
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -22,10 +23,17 @@
         <div class="container">
         <header></header>
         <section class="content">            
-            <center><h1>Registration</h1></center>
-            
-            <div class="login">
-            <form method="POST" action="Navigator?page=sign_up">
+            <center><h1>Registration</h1></center> 
+            <%if(request.getAttribute("signup_result") != null) { %>
+                <p style="font-size: 15px; text-align:center; color: #FF0000;">
+                <%=request.getAttribute("signup_result")%>
+                 </p>
+                 <br>
+                 <br>
+            <%}%>
+            <div class="login">               
+            <form method="POST" action="Navigator">
+                <input type="hidden" name="page" value="signup">
                 <table border="0">
                     <!--<thead1>
                         <tr>
@@ -59,7 +67,8 @@
                             </td>
                         </tr>
                     </tbody>
-                </table></form>            
+                </table>
+            </form>            
             </div>            
         </section>
         <footer>
@@ -67,7 +76,7 @@
             Georgiy Platonov
             <br> <a href="mailto:gplatono@cs.rochester.edu">gplatono@cs.rochester.edu</a>
             <br> University of Rochester
-            <br> 2016
+            <br> 2016-2017
             </div>
         </footer>        
         </div>        

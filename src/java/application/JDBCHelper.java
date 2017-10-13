@@ -68,6 +68,32 @@ public class JDBCHelper {
         return testcases;
     }
     
+    public static ArrayList<Testcase> getEnabledTypedTestcases(int type) throws SQLException {
+        ArrayList<Testcase> testcases = new ArrayList<>();
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM testcases WHERE enabled = true and type = " + type + ";";
+        ResultSet results = statement.executeQuery(query);
+        while(results.next()) {
+            Testcase testcase = new Testcase();
+            testcase.setId(results.getInt("ID"));
+            testcase.setQueryType(results.getInt("TYPE"));
+            testcase.setSceneID(results.getInt("SCENE_ID"));
+            testcase.setRelation(results.getString("RELATION"));
+            testcase.setRelatum(results.getString("RELATUM"));
+            testcase.setReferent1(results.getString("REFERENT1"));
+            testcase.setReferent2(results.getString("REFERENT2"));
+            testcase.setEnabled(results.getBoolean("ENABLED"));
+            testcase.setQuery(results.getString("QUERY"));
+            
+            //REMOVE THE CONDITION LATER
+            //if(testcase.getQueryType() == 2) {            
+            testcases.add(testcase);
+        }
+        results.close();
+        statement.close();
+        return testcases;
+    }
+    
     public static ArrayList<Testcase> getEnabledTestcases() throws SQLException {
         ArrayList<Testcase> testcases = new ArrayList<>();
         Statement statement = dbConnection.createStatement();
@@ -156,10 +182,19 @@ public class JDBCHelper {
             while(results.next()) {
                 ResultSet testcase_db = dbConnection.createStatement().executeQuery("SELECT * FROM testcases WHERE id = " + results.getInt("testcase") + ";");
                 if(testcase_db.next()) {
+                    ResultSet scene = dbConnection.createStatement().executeQuery("SELECT * FROM scenes WHERE id = " + testcase_db.getInt("scene_id") + ";");                    
+                        writer.print(results.getInt("id") + ":");
+                        writer.print(results.getInt("user_id") + ":");
                         writer.print(testcase_db.getInt("scene_id") + ":");
+                        if (scene.next()) {
+                            writer.print(scene.getString("name"));
+                        }
+                        writer.print(testcase_db.getString("relation") + ":");
                         writer.print(testcase_db.getString("relatum") + ":");
+                        writer.print(testcase_db.getString("referent1") + ":");
+                        writer.print(testcase_db.getString("referent2") + ":");
                         writer.print(testcase_db.getInt("type") + ":");
-                        String str = results.getString("response");
+                        //String str = results.getString("response");
                         writer.println(results.getString("response") + "###");
                 }
                 testcase_db.close();            
@@ -237,7 +272,7 @@ public class JDBCHelper {
         String query = "SELECT * FROM USERS;";
         ResultSet results = statement.executeQuery(query);
         while(results.next()) {
-            users.add(new User(results.getInt("id"), results.getString("username"), results.getString("password")));
+            users.add(new User(results.getInt("id"), results.getString("username"), results.getString("password"), results.getInt("role")));
         }
         results.close();
         statement.close();
@@ -267,5 +302,46 @@ public class JDBCHelper {
         return testcases;       
     }
     
+    public static ArrayList<Testcase> getUnansweredForUser(User user, int type) throws SQLException {
+        ArrayList<Testcase> testcases = new ArrayList<Testcase>();
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM TESTCASES WHERE enabled = true and type = " + type + " and id NOT IN (SELECT testcase FROM RESPONSES WHERE USER_ID = " + user.getId() +");";
+        ResultSet results = statement.executeQuery(query);
+        while(results.next()) {
+            Testcase testcase = new Testcase();
+            testcase.setId(results.getInt("ID"));
+            testcase.setQueryType(results.getInt("TYPE"));
+            testcase.setSceneID(results.getInt("SCENE_ID"));
+            testcase.setRelation(results.getString("RELATION"));
+            testcase.setRelatum(results.getString("RELATUM"));
+            testcase.setReferent1(results.getString("REFERENT1"));
+            testcase.setReferent2(results.getString("REFERENT2"));
+            testcase.setEnabled(results.getBoolean("ENABLED"));
+            testcase.setQuery(results.getString("QUERY"));            
+            testcases.add(testcase);        
+        }
+        results.close();
+        statement.close();
+        return testcases;       
+    }    
     
+    public static void AddUser(User user) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        String query = "INSERT INTO users(username, password, role) VALUES (";
+        query += "'" + user.getUsername() + "',";
+        query += "'" + user.getPassword() + "',";
+        query += user.getRole();
+        query += ");";
+        statement.executeUpdate(query);
+        statement.close();
+    }
+    
+    public static boolean CheckUsername(String username) throws SQLException {
+        boolean ret_val;
+        Statement statement = dbConnection.createStatement();
+        String query = "SELECT * FROM USERS WHERE username = '" + username + "';";
+        ret_val = statement.executeQuery(query).next();
+        statement.close();
+        return ret_val;
+    }
 }

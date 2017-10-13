@@ -25,7 +25,8 @@
             <center><h1>Login</h1></center>
             
             <div class="login">
-            <form method="POST" action="Login">
+            <form method="POST" action="Navigator">
+                <input type="hidden" name="page" value="login">
                 <table border="0">
                     <!--<thead1>
                         <tr>
@@ -55,7 +56,7 @@
                     </tbody>
                 </table></form>               
             </div>            
-            <p align="center">Don't have an account? <a href="Navigator?page=sign_up">Register</a></p>
+            <p align="center">Don't have an account? <a href="Navigator?page=signup">Register</a></p>
         </section>
         <footer>
             <div class="outer">
