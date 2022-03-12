@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
+ * This is a bean class used to store all the scene-related info
  * @author gplatono
  */
 @Entity
@@ -27,14 +27,28 @@ public class Scene implements Serializable {
     private String name;
     private String taskType;
 
+    /**
+     *
+     */
     public Scene() {
     }
 
+    /**
+     *
+     * @param id
+     * @param path
+     */
     public Scene(int id, String path) {
         this.id = id;
         this.path = path;
     }    
 
+    /**
+     *
+     * @param path
+     * @param name
+     * @param taskType
+     */
     public Scene(String path, String name, String taskType) {
         this.id = id;
         this.path = path;
@@ -42,6 +56,13 @@ public class Scene implements Serializable {
         this.taskType = taskType;
     }   
 
+    /**
+     *
+     * @param id
+     * @param path
+     * @param name
+     * @param taskType
+     */
     public Scene(int id, String path, String name, String taskType) {
         this.id = id;
         this.path = path;
@@ -49,40 +70,75 @@ public class Scene implements Serializable {
         this.taskType = taskType;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     *
+     * @param path
+     */
     public void setPath(String path) {
         this.path = path;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTaskType() {
         return taskType;
     }
 
+    /**
+     *
+     * @param taskType
+     */
     public void setTaskType(String taskType) {
         this.taskType = taskType;
     }
     
-
-
+    /**
+     *
+     * @param object
+     * @return
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -96,6 +152,10 @@ public class Scene implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "beans.Scene[ id=" + id + " ]";

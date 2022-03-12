@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Георгий Платонов
+ * @author gplatono
  */
 public class LoginManager extends HttpServlet {
 

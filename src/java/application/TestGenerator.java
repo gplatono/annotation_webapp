@@ -23,31 +23,25 @@ import java.util.stream.Collectors;
 import javax.persistence.Convert;
 
 /**
- *
+ * This class is responsible for the generation of the TestInstance object, that
+ * is associated with each annotation request from a user
  * @author gplatono
  */
-public class TestGenerator {
-    
-    private static String[] relations = {
-        "above, ", 
-        "below, ", 
-        "to the right of,",
-        "to the left of,",
-        "in front of,",
-        "behind,",
-        "near,",
-        "at,",
-        "in,",
-        "over,",
-        "under,",
-        "between,",
-        "on,",
-        "touching."};    
-    
+public class TestGenerator {    
+    /**
+     * Standard constructor
+     * @param sceneDirectory
+     */
     public TestGenerator(String sceneDirectory) {
         
     }
     
+    /**
+     * Randomly picks the testcase to present to the annotator
+     * @param user - User object
+     * @return TestInstacnce object with the test data
+     * @throws Exception
+     */
     public static TestInstance generate(User user) throws Exception {
         TestInstance testInstance = new TestInstance();        
         //ArrayList<Testcase> testcases = JDBCHelper.getEnabledTestcases();
@@ -63,7 +57,6 @@ public class TestGenerator {
         }
             
         testInstance.setUserID(user.getId());
-        //testInstance.setTestcase(testcases.get(new Random().nextInt(testcases.size())));
         Scene testScene = JDBCHelper.getSceneById(testInstance.getTestcase().getSceneID());
         testInstance.setImagePath(testScene.getPath());
 
@@ -74,9 +67,6 @@ public class TestGenerator {
         else {            
             String testQuery = "Where is " + testInstance.getTestcase().getRelatum() + " in the presented scene? Please describe its location relative to other objects. Use the following relations only:<br> ";
             testQuery += "[<b>above, below, to the right of, to the left of, in front of, behind, near, at, in, over, under, between, on, touching</b>].";
-            //for (String rel : relations) {
-            //    testQuery += "<b>" + rel + "</b>";
-            //}
             testInstance.setQuery(testQuery);
         }               
 

@@ -17,11 +17,19 @@ import javax.servlet.ServletContextListener;
  */
 public class Configurator implements ServletContextListener {
 
+    /**
+     * Operations to be performed when the application starts
+     * @param sce
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         JDBCHelper helper = new JDBCHelper();
     }
 
+    /**
+     * Operations to be performed when the application terminates
+     * @param sce
+     */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

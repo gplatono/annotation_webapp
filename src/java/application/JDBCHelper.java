@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
+ * Manages the persistence layer of the app
  * @author gplatono
  */
 public class JDBCHelper {
@@ -29,6 +29,9 @@ public class JDBCHelper {
     private final String PASS = "";
     private static Connection dbConnection = null;
     
+    /**
+     * Standard constructor
+     */
     public JDBCHelper() {
         try {
             Class.forName(JDBC_DRIVER);
@@ -41,6 +44,11 @@ public class JDBCHelper {
         }                
     }
     
+    /**
+     * Retrieves all the testcases stored in the database
+     * @return List of Testcase objects
+     * @throws SQLException
+     */
     public static ArrayList<Testcase> getAllTestcases() throws SQLException {
         ArrayList<Testcase> testcases = new ArrayList<>();
         Statement statement = dbConnection.createStatement();
@@ -68,6 +76,13 @@ public class JDBCHelper {
         return testcases;
     }
     
+    /**
+     * Retrieves all the enabled (active) testcases of the specified type
+     * @param type - the desired type of the testcases to be returned
+     * 0 - truth-judgment, 1 - description task type
+     * @return List of Testcase objects
+     * @throws SQLException
+     */
     public static ArrayList<Testcase> getEnabledTypedTestcases(int type) throws SQLException {
         ArrayList<Testcase> testcases = new ArrayList<>();
         Statement statement = dbConnection.createStatement();
@@ -94,6 +109,11 @@ public class JDBCHelper {
         return testcases;
     }
     
+    /**
+     * Retrieves all the enabled (active) testcases from the database
+     * @return List of Testcase objects
+     * @throws SQLException
+     */
     public static ArrayList<Testcase> getEnabledTestcases() throws SQLException {
         ArrayList<Testcase> testcases = new ArrayList<>();
         Statement statement = dbConnection.createStatement();
@@ -121,6 +141,11 @@ public class JDBCHelper {
         return testcases;
     }
     
+    /**
+     * Retrieves all the scene paths from the database
+     * @return List of paths to the Scene files in the string format
+     * @throws SQLException
+     */
     public static ArrayList<String> getScenes1() throws SQLException {        
         ArrayList<String> paths = new ArrayList<String>();
         Statement statement = dbConnection.createStatement();
@@ -134,6 +159,11 @@ public class JDBCHelper {
         return paths;
     }
     
+    /**
+     * Retrieves all the scenes from the database
+     * @return List of Scene objects
+     * @throws SQLException
+     */
     public static ArrayList<Scene> getScenes() throws SQLException {        
         ArrayList<Scene> scenes = new ArrayList<Scene>();
         Statement statement = dbConnection.createStatement();
@@ -148,6 +178,12 @@ public class JDBCHelper {
         return scenes;
     }
     
+    /**
+     * Searches for and retrieves a specific scene by its integer id
+     * @param id - the unique id of the scene
+     * @return The Scene object (null if not found)
+     * @throws SQLException
+     */
     public static Scene getSceneById(int id) throws SQLException {
         Scene scene = null;
         Statement statement = dbConnection.createStatement();
@@ -161,6 +197,12 @@ public class JDBCHelper {
         return scene;
     }
     
+    /**
+     * Saves the TestInstance object into the database
+     * @param testInstance - the object that stores the user annotation and associated 
+     * data
+     * @throws SQLException
+     */
     public static void saveResponse(TestInstance testInstance) throws SQLException {
         Statement statement = dbConnection.createStatement();
         String query = "INSERT INTO responses(testcase, user_id, response) VALUES (";
@@ -172,6 +214,12 @@ public class JDBCHelper {
         statement.close();        
     }
     
+    /**
+     * Creates a database dump
+     * @param filename - the path for the dump file
+     * @throws SQLException
+     * @throws FileNotFoundException
+     */
     public static void dump_responses(String filename) throws SQLException, FileNotFoundException {
                 
         Statement statement = dbConnection.createStatement();
@@ -184,10 +232,11 @@ public class JDBCHelper {
                 if(testcase_db.next()) {
                     ResultSet scene = dbConnection.createStatement().executeQuery("SELECT * FROM scenes WHERE id = " + testcase_db.getInt("scene_id") + ";");                    
                         writer.print(results.getInt("id") + ":");
+                        writer.print(testcase_db.getInt("id") + ":");
                         writer.print(results.getInt("user_id") + ":");
                         writer.print(testcase_db.getInt("scene_id") + ":");
                         if (scene.next()) {
-                            writer.print(scene.getString("name"));
+                            writer.print(scene.getString("name") + ":");
                         }
                         writer.print(testcase_db.getString("relation") + ":");
                         writer.print(testcase_db.getString("relatum") + ":");
@@ -205,6 +254,12 @@ public class JDBCHelper {
         statement.close();
     }
     
+    /**
+     * Checks if the specified scene exists in the database
+     * @param name - the name of the scene to look for
+     * @return boolean value
+     * @throws SQLException
+     */
     public static boolean sceneExist(String name) throws SQLException {
         Statement statement = dbConnection.createStatement();
         String query = "SELECT * FROM scenes WHERE name = '" + name + "'";
@@ -215,6 +270,13 @@ public class JDBCHelper {
         return ret_val;
     }
     
+    /**
+     * Checks if the specified testcase exists in the database
+     * @param signature - signature of the testcase is a string containing testcase
+     * data, such as the relation and its arguments
+     * @return boolean value
+     * @throws SQLException
+     */
     public static boolean testExist(String signature) throws SQLException {
         Statement statement = dbConnection.createStatement();
         String query = "SELECT * FROM testcases WHERE signature = '" + signature + "'";
@@ -225,6 +287,11 @@ public class JDBCHelper {
         return ret_val;
     }
     
+    /**
+     * Add the scene to the database
+     * @param scenes - List of Scene objects to be added
+     * @throws SQLException
+     */
     public static void add_scenes(ArrayList<Scene> scenes) throws SQLException {
         Statement statement = dbConnection.createStatement();
         String query = "INSERT INTO scenes(name, path, task_type) VALUES ";
@@ -241,6 +308,11 @@ public class JDBCHelper {
         statement.close();
     }
     
+    /**
+     * Adds the testcases to the database
+     * @param testcases - the list of TestCase objects to be added
+     * @throws SQLException
+     */
     public static void add_testcases(ArrayList<Testcase> testcases) throws SQLException {
         Statement statement = dbConnection.createStatement();
         String query = "INSERT INTO testcases(type, scene_id, relation, relatum, referent1, referent2, enabled, query, signature) VALUES";
@@ -266,6 +338,11 @@ public class JDBCHelper {
         statement.close();
     }
     
+    /**
+     * Retrieves all the users from the database
+     * @return List of User objects
+     * @throws SQLException
+     */
     public static ArrayList<User> getUsers() throws SQLException {
         ArrayList<User> users = new ArrayList<User>();
         Statement statement = dbConnection.createStatement();
@@ -279,6 +356,12 @@ public class JDBCHelper {
         return users;
     }
     
+    /**
+     * Retrieves the list of unanswered testcases for the specific user
+     * @param user - user id
+     * @return the list of testcases the user has not annotated yet
+     * @throws SQLException
+     */
     public static ArrayList<Testcase> getUnansweredForUser(User user) throws SQLException {
         ArrayList<Testcase> testcases = new ArrayList<Testcase>();
         Statement statement = dbConnection.createStatement();
@@ -302,6 +385,15 @@ public class JDBCHelper {
         return testcases;       
     }
     
+    /**
+     * Retrieves the list of unanswered testcases of a specific type for the 
+     * specific user     * 
+     * @param user - user id
+     * @param type - task type of the testcase
+     * @return - the list of testcases of the required type the user has not 
+     * annotated yet
+     * @throws SQLException
+     */
     public static ArrayList<Testcase> getUnansweredForUser(User user, int type) throws SQLException {
         ArrayList<Testcase> testcases = new ArrayList<Testcase>();
         Statement statement = dbConnection.createStatement();
@@ -325,6 +417,11 @@ public class JDBCHelper {
         return testcases;       
     }    
     
+    /**
+     * Creates a new database record for a user
+     * @param user - User object containing all the user data
+     * @throws SQLException
+     */
     public static void AddUser(User user) throws SQLException {
         Statement statement = dbConnection.createStatement();
         String query = "INSERT INTO users(username, password, role) VALUES (";
@@ -336,6 +433,12 @@ public class JDBCHelper {
         statement.close();
     }
     
+    /**
+     * Checks if the given username already exists in the database
+     * @param username - username to check
+     * @return boolean value
+     * @throws SQLException
+     */
     public static boolean CheckUsername(String username) throws SQLException {
         boolean ret_val;
         Statement statement = dbConnection.createStatement();

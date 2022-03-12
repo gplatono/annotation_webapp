@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Георгий Платонов
+ * @author gplatono
  */
 //@WebServlet("/SubmissionHandler")
 public class SubmissionHandler extends HttpServlet {

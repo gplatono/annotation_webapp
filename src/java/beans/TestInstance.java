@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 
 /**
  *
- * @author georgiy
+ * @author gplatono
  */
 @Entity
 public class TestInstance implements Serializable {

@@ -26,7 +26,7 @@ import application.UserSecurityManager;
 
 /**
  *
- * @author Георгий Платонов
+ * @author gplatono
  */
 public class Navigator extends HttpServlet {
 
